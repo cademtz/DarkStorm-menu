@@ -21,10 +21,10 @@ Just a neat menu source for the TF2 DarkStorm base
   float hue = 0;
  };
  
- extern Esp gEsp
+ extern Esp gEsp;
  ```
  
- To actually use those values in the menu to modify, insert them in the createList void in Menu.cpp like so:
+ To actually use those values in the menu, insert them in the createList void in Menu.cpp like so:
  ```cpp
  #include "Example esp hack" // You must include your hack
  
