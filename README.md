@@ -1,4 +1,4 @@
-# DarkStorm-menu
+# BetterMenu
 Just a neat menu source for the TF2 DarkStorm base
 
 ## Format for adding items:
