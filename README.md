@@ -34,7 +34,7 @@ Just a neat menu source for the TF2 DarkStorm base
   
   t = (t, "ESP", &gEsp.espTab); // Note the & before all the variables used
   // Make sure you use an if statement with your tab variable, otherwise it will appear regardless of the tab
-  if (gEsp.espTab)
+  if (gEsp.espTab == 1)
   {
     i = addBool(i, "Enabled", &gEsp.enabled);
     i = addFloat(i, "Outline hue", &gEsp.hue, 0, 255, 1);
