@@ -1,7 +1,7 @@
 # DarkStorm-menu
 Just a neat menu source for the TF2 DarkStorm base
 
- ## Format for adding items:
+## Format for adding items:
  ```cpp
  addTab(int index, char name[30], float *value)
  addBool(int index, char name[30], float *value)
@@ -9,7 +9,7 @@ Just a neat menu source for the TF2 DarkStorm base
  // Step is how much the item will increment / decrement
  ```
 
- ## If you don't know how to properly add items to the menu, refer to this example:
+## If you don't know how to properly add items to the menu, refer to this example:
  
  Random example header for a hack:
  ```cpp
