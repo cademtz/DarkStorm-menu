@@ -38,7 +38,7 @@ float Animate::linear(float start, float end, float speed)
 	return end;
 }
 
-bool Animate::timer()
+bool Animate::timer() // This is to make sure that the animations don't get calculated in a split-second
 {
 	int t = clock();
 	static int i = 0;
