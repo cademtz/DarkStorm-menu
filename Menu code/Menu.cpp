@@ -27,6 +27,8 @@ void Menu::createList()
 		i = addBool(i, "Enabled", &enabled);
 		i = addFloat(i, "Outline hue", &hue, 0, 255, 1);
 	}
+	
+	// Feel free to clear all these test tabs and items if you like
 
 	tabAmount = t; itemAmount = i;
 }
