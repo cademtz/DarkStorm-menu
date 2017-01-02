@@ -1,7 +1,12 @@
 # BetterMenu
 Just a neat menu source for the TF2 DarkStorm base
 
-## Format for adding items:
+## Table of contents:
+- [How to add items](#items)
+
+## Items
+This is the format for adding items. Note that the names have a 30 character limit
+
  ```cpp
  addTab(int index, char name[30], float *value)
  addBool(int index, char name[30], float *value)
