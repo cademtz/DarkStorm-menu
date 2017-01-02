@@ -2,12 +2,19 @@
 Just a neat menu source for the TF2 DarkStorm base
 
 ## Table of contents:
+- [How to quickly add the menu to your hack](#menu)
 - [Format for adding items](#items)
  - [Example of adding items](#example)
 - [Using Animate.h](#animating)
  - [Linear](#linear)
  - [Ease in](#ease-in)
  - [Ease out](#ease-out)
+- [Credits](#credits)
+ 
+## Menu
+To quickly add this menu into your hack, all you have to do is add all the .cpp and .h files into your DarkStorm hack, and call `gMenu.paint()` in DarkStorm's `Panels.cpp` (Also known as Paint traverse.)
+
+That's it! All you need to do is add tabs and items to control you hack. Feel free to follow the small tutorial below.
 
 ## Items
 This is the format for adding items. Note that the names have a 30 character limit
@@ -120,3 +127,13 @@ void yourHack::main()
  f = gAnimate.easeOut(f, 300, 1.1);
 }
 ```
+## Credits
+
+* gir489
+  - Developed and released the base that I made the cheat menu for.
+ 
+* katetem
+  - Developed and released CrapStorm which I (Practically copied) the adding items and tabs functions from.
+   
+* josh33901 (or F1ssi0N)
+  - Developed and released F1-Public which helped me learn how to use DarkStorm
