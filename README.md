@@ -3,7 +3,7 @@ Just a neat menu source for the TF2 DarkStorm base
 
 ## Table of contents:
 - [Format for adding items](#items)
-  - [Example of adding items](#example)
+ - [Example of adding items](#example)
 - [Using animation](#animating)
 
 ## Items
@@ -53,4 +53,4 @@ This is what adding items should look like.
  }
  ```
 ## Animating
-You may notice that the default menu has an interesting animation with the logos and tabs sliding into view. This is done using the Animate
+You may notice that the default menu has an interesting animation with the logos and tabs sliding into view. This is done using the Animate functions in Animate.h
