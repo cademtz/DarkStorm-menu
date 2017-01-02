@@ -14,7 +14,7 @@ Just a neat menu source for the TF2 DarkStorm base
 ## Menu
 To quickly add this menu into your hack, all you have to do is add all the .cpp and .h files into your DarkStorm hack, and call `gMenu.paint()` in DarkStorm's `Panels.cpp` (Also known as Paint traverse.)
 
-That's it! All you need to do is add tabs and items to control you hack. Feel free to follow the small tutorial below.
+That's it! Now you can start adding tabs and items to control you hack. Feel free to follow the small tutorial below.
 
 ## Items
 This is the format for adding items. Note that the names have a 30 character limit
