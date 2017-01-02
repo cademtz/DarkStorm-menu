@@ -3,6 +3,7 @@
 #include "CDrawManager.h"
 #include "commonColors.h"
 #include "fontString.h"
+#include "Animate.h"
 
 #include <string>
 #include <conio.h>
@@ -11,7 +12,7 @@ Menu gMenu;
 
 void Menu::createList()
 {
-	int t = 0, i = 0; // Use these to find how many items / tabs to look for
+	int t = 0, i = 0; // Use these to keep track of tab / item amount
 
 	t = addTab(t, "Misc", &misc); // Add a tab connected to a value
 	if (misc == 1) // If this tab is selected, then load these items
@@ -24,7 +25,7 @@ void Menu::createList()
 	if (esp == 1)
 	{
 		i = addBool(i, "Enabled", &enabled);
-		i = addFloat(i, "Hue", &hue, 0, 255, 1);
+		i = addFloat(i, "Outline hue", &hue, 0, 255, 1);
 	}
 
 	tabAmount = t; itemAmount = i;
@@ -32,9 +33,9 @@ void Menu::createList()
 
 void Menu::paint()
 {
-	if (bFontSetup) // So we only create the fonts once
+	if (bStartUp) // Only runs once
 	{
-		fontSetup(); // Create the needed fonts
+		startUp();
 	}
 
 	if (GetAsyncKeyState(VK_INSERT) & 0x1)
@@ -50,30 +51,51 @@ void Menu::paint()
 		// Refresh the list of items
 		createList();
 
-		// Draw the transparent background
+		// Draw the background
 		gDrawManager.DrawRect(menuX, menuY, 600, 350, menuBack);
+		gDrawManager.DrawRect(menuX - 40, menuY - 50, 300, 50, dark); // Adjust this to fit your cheat name
+
+		// Ease the value of introAnimation to 0 by a factor of 0.9
+		introAnimation = gAnimate.easeIn(introAnimation, 0, 0.9);
+
+		// Feel free to put your cheat name here!
+		gFontString.DrawString((menuX + 10) - introAnimation, menuY - 45, redTeam, tabFont, "BetterMenu");
 
 		// Render all the tabs
 		for (int i = 0; i < tabAmount; i++)
 		{
-			int x = menuX + 10;
-			int y = menuY + (20 + (i * 40)); // Everytime a tab is found, make it lower than the last
+			int x = menuX + 15;
+			int y = menuY + (20 + (i * 40)); // Make each tab lower than the last
 
 			if (i == tabIndex) // If the tab we're rendering is selected, make it blue
 			{
-				gFontString.DrawString(x + 5, y, bluTeam, tabFont, tabArray[i].name);
+				gFontString.DrawString(x - introAnimation, y, bluTeam, tabFont, tabArray[i].name);
 			}
 			else // If it's not selected, make a plain tab
 			{
-				gFontString.DrawString(x + 5, y, light, tabFont, tabArray[i].name);
+				gFontString.DrawString(x - introAnimation, y, light, tabFont, tabArray[i].name);
 			}
 		}
 
 		// Render all the items in selected tab
 		for (int i = 0; i < itemAmount; i++)
 		{
-			int x = menuX + 200;
-			int y = menuY + (60 + (i * 40)); // Make each item lower than the last
+			int x, y;
+			if (i <= 7)
+			{
+				x = menuX + 200;
+				y = menuY + 40 + (i * 40); // Make each item lower than the last
+			}
+			else if (i <= 17) // If there are too many items, start a new row
+			{
+				x = menuX + 320;
+				y = menuY + 40 + ((i - 8) * 40);
+			}
+			else // And another row
+			{
+				x = menuX + 440;
+				y = menuY + 40 + ((i - 16) * 40);
+			}
 
 			if (itemArray[i].type == boolean) // If the item is a bool, then use checkboxes
 			{
@@ -95,29 +117,35 @@ void Menu::paint()
 			}
 			else if (itemArray[i].type == decimal) // Otherwise, if it's a decimal, use sliders
 			{
-				if (i == itemIndex)
-				{
-					gFontString.DrawString(x - 25, y - 25, bluTeam, itemFont, itemArray[i].name);
-				}
-				else
-				{
-					gFontString.DrawString(x - 25, y - 25, light, itemFont, itemArray[i].name);
-				}
-
 				// Get the distance from the value to the max out of 100
 				int a = 100 * itemArray[i].value[0] / itemArray[i].max;
 
 				gDrawManager.DrawRect(x - 25, y, 100, 10, dark); // Draw the slider background
 				gDrawManager.DrawRect(x - 25, y, a, 10, bluTeam); // Draw the slider progress
 
-				// Draw the value next to the progress of the slider
-				gFontString.DrawString(a + x - 25, y, light, itemFont, to_string(int(itemArray[i].value[0])).c_str());
+				if (i == itemIndex)
+				{
+					gFontString.DrawString(x - 25, y - 25, bluTeam, itemFont, itemArray[i].name);
+
+					// Draw the value next to the progress of the slider
+					gFontString.DrawString(a + x - 25, y, bluTeam, itemFont, to_string(int(itemArray[i].value[0])).c_str());
+				}
+				else
+				{
+					gFontString.DrawString(x - 25, y - 25, light, itemFont, itemArray[i].name);
+
+					gFontString.DrawString(a + x - 25, y, light, itemFont, to_string(int(itemArray[i].value[0])).c_str());
+				}
 			}
 		}
 	}
+	else
+	{
+		introAnimation = 300; // Reset the animated offset
+	}
 }
 
-void Menu::fontSetup()
+void Menu::startUp()
 {
 	itemFont = gInts.Surface->CreateFont();
 	gInts.Surface->SetFontGlyphSet(itemFont, "Trebuchet MS", 20, 800, 0, 0, FONTFLAG_ANTIALIAS);
@@ -125,10 +153,8 @@ void Menu::fontSetup()
 	tabFont = gInts.Surface->CreateFont();
 	gInts.Surface->SetFontGlyphSet(tabFont, "Tahoma", 40, 4000, 0, 0, FONTFLAG_ANTIALIAS);
 
-	bFontSetup = false; // create the fonts once to prevent an overload leading to a crash
+	bStartUp = false; // create the fonts once to prevent an overload leading to a crash
 }
-
-// All these "add" voids are used because DarkStorm does not like it when you use structs with {}
 
 int Menu::addTab(int arrayIndex, char name[30], float *value)
 {
@@ -188,6 +214,8 @@ void Menu::handleInput()
 {
 	if (GetAsyncKeyState(VK_TAB) & 0x1)
 	{
+		itemIndex = 0; // Reset the item index to prevent buggy selections
+
 		if (tabIndex + 1 > tabAmount - 1) // If you're about to go above the amount, go to 0
 		{
 			tabArray[tabIndex].value[0] = 0;
@@ -198,7 +226,7 @@ void Menu::handleInput()
 		{
 			tabArray[tabIndex].value[0] = 0;
 			tabIndex++;
-			tabArray[tabIndex].value[0] = 1; // Just a sloppy way of making sure one tab is enabled
+			tabArray[tabIndex].value[0] = 1;
 		}
 	}
 	else if (GetAsyncKeyState(VK_DOWN) & 0x1)
@@ -212,9 +240,9 @@ void Menu::handleInput()
 			itemIndex++;
 		}
 	}
-	else if (GetAsyncKeyState(VK_UP) & 0x1)  // If you're about to go below the amount, go to the max
+	else if (GetAsyncKeyState(VK_UP) & 0x1)
 	{
-		if (itemIndex - 1 < 0)
+		if (itemIndex - 1 < 0) // If you're about to go below the amount, go to the max
 		{
 			itemIndex = itemAmount - 1;
 		}
