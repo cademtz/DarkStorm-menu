@@ -47,7 +47,7 @@ private:
 	bool menuToggle = false;
 	bool bStartUp = true;
 
-	// Just a big block of values to use for the items
+	// Just a big block of values to use for the items. Remove these if you want
 	float misc = 0;
 	float bHop = 0;
 	float spinBot = 0;
@@ -56,6 +56,7 @@ private:
 	float enabled = 0;
 	float hue = 0;
 
+	// Value used for animated the logo / tabs
 	float introAnimation = 300;
 };
 
