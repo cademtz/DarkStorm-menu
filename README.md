@@ -4,8 +4,10 @@ Just a neat menu source for the TF2 DarkStorm base
 ## Table of contents:
 - [Format for adding items](#items)
  - [Example of adding items](#example)
-- [Using animation](#animating)
- - [Ease in](#Ease in)
+- [Using Animate.h](#animating)
+ - [Linear](#linear)
+ - [Ease in](#ease-in)
+ - [Ease out](#ease-out)
 
 ## Items
 This is the format for adding items. Note that the names have a 30 character limit
@@ -54,22 +56,38 @@ This is what adding items should look like.
  }
  ```
 ## Animating
-You may notice that the default menu has an interesting animation with the logo and tabs sliding into view. This is done using the ease functions in Animate.h
+You may notice that the default menu has an interesting animation with the logo and tabs sliding into view. This is done using the easeIn function in Animate.h
 
-There's actully three different animation functions you can use, and they're pretty simple, but to actually use them you will need to know a little bit about how they work.
+There's three different animation functions you can use, and they're pretty simple, but to actually use them you will need to know a little bit about how they work.
+
+###Linear
+This is the most basic one. This has a linear effect meaning it moves at a constant speed.
+
+You have `value` which must be less than `end` because it gets incremented by `speed` (which can be any value).
+
+Example:
+```cpp
+#include "Animate.h" // You must include this to use the animate functions
+
+float f = 1;
+
+void yourHack::main()
+{
+ f = gAnimate.linear(f, 300, 0.5);
+}
+```
 
 ### Ease in:
-This is what I used to animte the logo and tabs. easeIn will take a float value and multiply it by a value LESS than 1. This is so that the animated value will start at a fair speed, and slow to a stop (also known as easing in).
+This is what I used to animte the logo and tabs. easeIn will take `value` and multiply it by `speed`. This is so that the `value` will appear to be animated by starting at a fair speed and slowing to a stop (also known as easing in).
+
+`value` must be greater than `end`, because it gets multiplied by `speed` (which MUST be less than 1) to get the slowing down effect.
+This also means that if `speed` is 0.5, the animation will be faster than if `speed` were 0.9.
+
+Note: Since the ease functions work by multiplying, using `0` for `value` will result in no animation.
 
 Format:
 ```cpp
  int easeIn(float value, float end, float speed);
- // Note that the speed MUST be less than 1, or it will skip to the end of the animation
- // to prevent really buggy results.
- 
- // The value must also be greater than the end (The value the animation will try to reach)
- // since it works by decreasing the animated value. This means that you can't use negative values either.
- // You can just add / subtract if you want to decrease or increase a value.
 ```
 
 Example:
@@ -80,8 +98,25 @@ float f = 300;
 
 void yourHack::main()
 {
- f = easeIn(f, 300 /*This is the value easeIn will try to reach*/, 0.9 /*Speed*/);
+ f = gAnimate.easeIn(f, 0, 0.9);
 }
 ```
 
-If you add or subtract a value like the X axis of a square, then the square will ease into the left / right.
+Important: Since you can't use negative numbers (because of buggy effects), just add or subtract a variable with your animated variable to get an opposite-direction effect.
+
+### Ease out
+This will cause a value to start increasing at a slow pace, accelerate, and eventualy halt at the end value.
+
+Once you know how to use easeIn, this will be similar. The main difference is that `end` must be larger than `value`. This is so that `speed` (which MUST be greater than 1) can achieve the reverse effect of easeIn as described above.
+
+Example:
+```cpp
+#include "Animate.h" // You must include this to use the animate functions
+
+float f = 1;
+
+void yourHack::main()
+{
+ f = gAnimate.easeOut(f, 300, 1.1);
+}
+```
