@@ -9,6 +9,7 @@ Just a neat menu source for the TF2 DarkStorm base
  - [Linear](#linear)
  - [Ease in](#ease-in)
  - [Ease out](#ease-out)
+- [Updates (changelogs)](#changes)
 - [Credits](#credits)
  
 ## Menu
@@ -127,6 +128,14 @@ void yourHack::main()
  f = gAnimate.easeOut(f, 300, 1.1);
 }
 ```
+
+## Changes
+
+Update 1:
+ - A moderate change in the menu style
+ - The menu is now less clunky & can fit more items.
+ - Items now stack up to three rows [properly]
+
 ## Credits
 
 * gir489
