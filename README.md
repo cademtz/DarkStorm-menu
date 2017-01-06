@@ -137,6 +137,7 @@ Update 1:
  - A moderate change in the menu style
  - The menu is now less clunky & can fit more items.
  - Items now stack up to three rows [properly]
+ - "Spaces" can be used in menu items (to seperate them into groups)
 
 ## Credits
 
