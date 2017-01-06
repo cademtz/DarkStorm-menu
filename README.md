@@ -21,6 +21,7 @@ That's it! Now you can start adding tabs and items to control you hack. Feel fre
 This is the format for adding items. Note that the names have a 30 character limit
 
  ```cpp
+ int addSpace(int index);
  int addTab(int index, char name[30], float *value);
  int addBool(int index, char name[30], float *value);
  int addFloat(int index, char name[30], float *value, int min, int max, int step);
@@ -57,6 +58,7 @@ This is what adding items should look like.
   if (gEsp.espTab == 1)
   {
     i = addBool(i, "Enabled", &gEsp.enabled);
+    i = addSpace(i); // This will add a space (like an invis option) between these items
     i = addFloat(i, "Outline hue", &gEsp.hue, 0, 255, 1);
   }
   
