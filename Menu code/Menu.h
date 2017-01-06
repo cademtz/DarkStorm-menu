@@ -2,9 +2,9 @@
 #include "SDK.h"
 
 // Defining easy to use menu item types
-#define tab "tab"
-#define boolean "bool"
-#define decimal "decimal"
+#define TAB "tab"
+#define BOOLEAN "bool"
+#define DECIMAL "decimal"
 
 // Struct to keep all the data of a menu item in one variable
 struct menuItem
@@ -32,6 +32,7 @@ public:
 	int menuX = 0, menuY = 200;
 
 	// Using voids to easily add items to the menu
+	int addSpace(int arrayIndex);
 	int addTab(int arrayIndex, char name[30], float *value);
 	int addBool(int arrayIndex, char name[30], float *value);
 	int addFloat(int arrayIndex, char name[30], float *value, float min, float max, float step);
