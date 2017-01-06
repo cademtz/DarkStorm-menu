@@ -55,19 +55,21 @@ void Menu::paint()
 
 		// Draw the background
 		gDrawManager.DrawRect(menuX, menuY, 600, 350, menuBack);
-		gDrawManager.DrawRect(menuX - 40, menuY - 50, 300, 50, dark); // Adjust this to fit your cheat name
+
+		// Adjust this to fit your cheat name
+		gDrawManager.DrawRect(menuX - 40, menuY - 40, 180, 40, dark);
 
 		// Ease the value of introAnimation to 0 by a factor of 0.9
 		introAnimation = gAnimate.easeIn(introAnimation, 0, 0.9);
 
 		// Feel free to put your cheat name here!
-		gFontString.DrawString((menuX + 10) - introAnimation, menuY - 45, redTeam, tabFont, "BetterMenu");
+		gFontString.DrawString((menuX + 10) - introAnimation, menuY - 35, redTeam, tabFont, "BetterMenu");
 
 		// Render all the tabs
 		for (int i = 0; i < tabAmount; i++)
 		{
 			int x = menuX + 15;
-			int y = menuY + (20 + (i * 40)); // Make each tab lower than the last
+			int y = menuY + (10 + (i * 30)); // Make each tab lower than the last
 
 			if (i == tabIndex) // If the tab we're rendering is selected, make it blue
 			{
@@ -83,23 +85,23 @@ void Menu::paint()
 		for (int i = 0; i < itemAmount; i++)
 		{
 			int x, y;
-			if (i <= 7)
+			if (i <= 11)
 			{
 				x = menuX + 200;
-				y = menuY + 40 + (i * 40); // Make each item lower than the last
+				y = menuY + 30 + (i * 28); // Make each item lower than the last
 			}
-			else if (i <= 17) // If there are too many items, start a new row
+			else if (i <= 23) // If there are too many items, start a new row
 			{
 				x = menuX + 320;
-				y = menuY + 40 + ((i - 8) * 40);
+				y = menuY + 30 + ((i - 12) * 28);
 			}
 			else // And another row
 			{
 				x = menuX + 440;
-				y = menuY + 40 + ((i - 16) * 40);
+				y = menuY + 30 + ((i - 24) * 28);
 			}
 
-			if (itemArray[i].type == boolean) // If the item is a bool, then use checkboxes
+			if (itemArray[i].type == BOOL) // If the item is a bool, then use checkboxes
 			{
 				if (i == itemIndex) // If our item is selected, make it blue
 				{
@@ -110,33 +112,36 @@ void Menu::paint()
 					gFontString.DrawString(x, y - 15, light, itemFont, itemArray[i].name);
 				}
 
-				gDrawManager.DrawRect(x - 25, y - 15, 20, 20, dark); // Draw checkbox background
+				gDrawManager.DrawRect(x - 25, y - 15, 15, 15, dark); // Draw checkbox background
+				gDrawManager.OutlineRect(x - 26, y - 16, 17, 17, gray); // Draw checkbox outline
 
 				if (itemArray[i].value[0] == 1) // If the value = true, add a check in the box
 				{
-					gDrawManager.DrawRect(x - 22, y - 12, 14, 14, bluTeam);
+					gDrawManager.DrawRect(x - 23, y - 13, 11, 11, bluTeam);
 				}
 			}
-			else if (itemArray[i].type == decimal) // Otherwise, if it's a decimal, use sliders
+			else if (itemArray[i].type == DECIMAL) // Otherwise, if it's a decimal, use sliders
 			{
 				// Get the distance from the value to the max out of 100
 				int a = 100 * itemArray[i].value[0] / itemArray[i].max;
 
-				gDrawManager.DrawRect(x - 25, y, 100, 10, dark); // Draw the slider background
-				gDrawManager.DrawRect(x - 25, y, a, 10, bluTeam); // Draw the slider progress
+				gDrawManager.DrawRect(x - 26, y - 10, 100, 10, dark); // Draw the slider background
+				gDrawManager.DrawRect(x - 26, y - 10, a, 10, bluTeam); // Draw the slider progress
+
+				gDrawManager.DrawRect(x - 26, y + 2, 100, 1, gray); // Extra line below slider
 
 				if (i == itemIndex)
 				{
-					gFontString.DrawString(x - 25, y - 25, bluTeam, itemFont, itemArray[i].name);
+					gFontString.DrawString(x - 20, y - 25, bluTeam, itemFont, itemArray[i].name);
 
 					// Draw the value next to the progress of the slider
-					gFontString.DrawString(a + x - 25, y, bluTeam, itemFont, to_string(int(itemArray[i].value[0])).c_str());
+					gFontString.DrawString(a + x - 20, y - 12, bluTeam, itemFont, to_string(int(itemArray[i].value[0])).c_str());
 				}
 				else
 				{
-					gFontString.DrawString(x - 25, y - 25, light, itemFont, itemArray[i].name);
+					gFontString.DrawString(x - 20, y - 25, light, itemFont, itemArray[i].name);
 
-					gFontString.DrawString(a + x - 25, y, light, itemFont, to_string(int(itemArray[i].value[0])).c_str());
+					gFontString.DrawString(a + x - 20, y - 12, light, itemFont, to_string(int(itemArray[i].value[0])).c_str());
 				}
 			}
 		}
@@ -150,12 +155,18 @@ void Menu::paint()
 void Menu::startUp()
 {
 	itemFont = gInts.Surface->CreateFont();
-	gInts.Surface->SetFontGlyphSet(itemFont, "Trebuchet MS", 20, 800, 0, 0, FONTFLAG_ANTIALIAS);
+	gInts.Surface->SetFontGlyphSet(itemFont, "Tahoma", 15, 1800, 0, 0, FONTFLAG_ANTIALIAS);
 
 	tabFont = gInts.Surface->CreateFont();
-	gInts.Surface->SetFontGlyphSet(tabFont, "Tahoma", 40, 4000, 0, 0, FONTFLAG_ANTIALIAS);
+	gInts.Surface->SetFontGlyphSet(tabFont, "Impact", 26, 1800, 0, 0, FONTFLAG_ANTIALIAS);
 
 	bStartUp = false; // create the fonts once to prevent an overload leading to a crash
+}
+
+int Menu::addSpace(int arrayIndex)
+{
+	tabArray[arrayIndex].type = SPACE;
+	return arrayIndex + 1;
 }
 
 int Menu::addTab(int arrayIndex, char name[30], float *value)
@@ -166,7 +177,7 @@ int Menu::addTab(int arrayIndex, char name[30], float *value)
 	if (name == NULL || name == "") // If it has no name, then don't make it
 		return arrayIndex;
 
-	tabArray[arrayIndex].type = tab;
+	tabArray[arrayIndex].type = TAB;
 	tabArray[arrayIndex].value = value;
 	tabArray[arrayIndex].min = 0;
 	tabArray[arrayIndex].max = 1;
@@ -185,7 +196,7 @@ int Menu::addBool(int arrayIndex, char name[30], float *value)
 	if (name == NULL || name == "") // If it has no name, then don't make it
 		return arrayIndex;
 
-	itemArray[arrayIndex].type = boolean;
+	itemArray[arrayIndex].type = BOOLEAN;
 	itemArray[arrayIndex].value = value;
 	itemArray[arrayIndex].min = 0;
 	itemArray[arrayIndex].max = 1;
@@ -201,7 +212,7 @@ int Menu::addFloat(int arrayIndex, char name[30], float *value, float min, float
 	if (name == NULL || name == "") // If it has no name, then don't make it
 		return arrayIndex;
 
-	itemArray[arrayIndex].type = decimal;
+	itemArray[arrayIndex].type = DECIMAL;
 	itemArray[arrayIndex].value = value;
 	itemArray[arrayIndex].min = min;
 	itemArray[arrayIndex].max = max;
